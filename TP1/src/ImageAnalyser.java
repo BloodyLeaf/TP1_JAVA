@@ -11,9 +11,9 @@ public class ImageAnalyser
      * lit une image d'un fichier
      * @param f fichier contenant l'image
      */
-    public static void readImage(File f)
+    public static void readImage(File f, Image img)
     {
-
+        img.readImage(f);
     }
 
     /**
@@ -21,9 +21,9 @@ public class ImageAnalyser
      * @param f fichier d'écriture
      * @param i image à écrire
      */
-    public static void write(File f, Image i)
+    public static void write(File f, Image img)
     {
-
+        img.write(f);
     }
     /**
      * copie image2 dans image 1
@@ -32,7 +32,7 @@ public class ImageAnalyser
      */
     public static void CopyImage(Image img1, Image img2)
     {
-
+        img1.copyImage(img2);
     }
     /**
      * vérifie la couleur la plus présente dans l'image
@@ -41,8 +41,7 @@ public class ImageAnalyser
      */
     public static int preponderanceColor(Image img)
     {
-
-        return 0;
+        return img.prepoderanceColor();
     }
 
     /**
@@ -52,7 +51,7 @@ public class ImageAnalyser
      */
     public static void darken_brighten(Image img, int v)
     {
-
+        img.darken_Brigthen(v);
     }
 
     /**
@@ -66,7 +65,7 @@ public class ImageAnalyser
      */
     public static Image extract(Image img, int x,int y, int nHeight, int nWidth)
     {
-        return img;
+        return img.extract(x, y, nHeight, nWidth);
     }
 
     /**
@@ -76,7 +75,7 @@ public class ImageAnalyser
      */
     public static Image reduce(Image img)
     {
-        return img;
+        return img.reduce();
     }
 
     /**
@@ -86,7 +85,7 @@ public class ImageAnalyser
      */
     public static Image rotate90(Image img)
     {
-        return img;
+        return img.rotate90();
     }
 
     /**
