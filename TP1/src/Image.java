@@ -4,23 +4,35 @@
  */
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.Scanner;
 
 public class Image
 {
     private File f;
+    String imgType;
     private int width;
     private int height;
-    //private Array<Pixel> lstPixel;
+    private Pixel lstPixel[][];
 
-    public Image()
+
+    //Manque sa a finir : get le type
+    public Image(File fichier)
     {
-
+        try {
+            Scanner fileReader = new Scanner(fichier);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * permet de set la largeur de l'image
      * @param width largeur de limage, doit être un int
      */
+
     public void setWidth(int width)
     {
         this.width = width;
@@ -37,20 +49,26 @@ public class Image
 
     /**
      * Verifie la couleur la plus présente dans l'image
-     * @param img l'image a vérifier, doit être une image
      * @return
      */
-    public static int prepoderanceColor(Image img)
+    public static int prepoderanceColor()
     {
         return 0;
     }
+
+
     /**
      * Modifie la valeur courante de l'image
      * @param v difference de modification, doit être un int
      */
-    public static void darken_Brigthen(int v)
+    public void darken_Brigthen(int v)
     {
-
+        for(int i = 0 ; i < width ; i++){
+            for(int j = 0 ; j < height ; j++){
+                if(getPixel(i,j) instanceof BWPixel ) ((BWPixel)getPixel(i,j)).darken_Brigthen(v);
+                if(getPixel(i,j) instanceof ColorPixel ) ((ColorPixel)getPixel(i,j)).darken_Brigthen(v);
+            }
+        }
     }
 
     /**
@@ -59,7 +77,12 @@ public class Image
      */
     public void write(File f)
     {
-
+        for(int i = 0 ; i < width ; i++){
+            for(int j = 0 ; j < height ; j++){
+                if(getPixel(i,j) instanceof BWPixel ) ((BWPixel)getPixel(i,j)).writePixel(f);
+                if(getPixel(i,j) instanceof ColorPixel ) ((ColorPixel)getPixel(i,j)).writePixel(f);
+            }
+        }
     }
 
     /**
@@ -75,7 +98,7 @@ public class Image
      * permet de copier un image
      * @param img image à copier
      */
-    public static void CopyImage(Image img)
+    public static void copyImage(Image img)
     {
 
     }
@@ -88,9 +111,9 @@ public class Image
      * @param nWidth largeur de l'image, doit être un int
      * @return nouvelle image
      */
-    public static Image Extract(int x, int y, int nHeight, int nWidth)
+    public static Image extract(int x, int y, int nHeight, int nWidth)
     {
-        Image img = new Image();
+        Image img = null;
         return img;
     }
 
@@ -105,8 +128,14 @@ public class Image
     /**
      * reduit la grosseur de l'image
      */
-    public static void reduce()
+    public static Image reduce()
     {
+        Image img = null;
+        return img;
+    }
 
+    private Pixel getPixel(int x, int y ){
+
+        return lstPixel[x][y];
     }
 }
