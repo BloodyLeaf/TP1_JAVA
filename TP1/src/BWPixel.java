@@ -25,7 +25,14 @@ public class BWPixel extends Pixel
      */
     public void readPixel(int c)
     {
-        this.color1 = c;
+        if(c < 0)
+        {
+            this.color1 = 0;
+        }
+        else
+        {
+            this.color1 = c;
+        }
     }
     public void writePixel(File f)
     {
@@ -48,7 +55,6 @@ public class BWPixel extends Pixel
     {
         return this.color1;
     }
-
     /**
      * Modifie la valeur courante de c
      * @param v difference de modification, doit être un int
