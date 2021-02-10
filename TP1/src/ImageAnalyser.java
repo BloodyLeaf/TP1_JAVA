@@ -1,5 +1,5 @@
 /**
- * @author Pier-Alexandre Carron, William Goupil
+ * @author Pier-Alexandre Caron, William Goupil
  * @version 1.0
  */
 
@@ -94,7 +94,18 @@ public class ImageAnalyser
      */
     public static void main(String[] args)
     {
+        String nomFichierImage = "Sherbrooke_Frontenac_nuit.pgm";
+        Image img1 = new Image(nomFichierImage);
+        img1.rotate90();
+
+
+        File rotateImg = new File("frontenac_Rotate.pgm");
+
+        img1.write(rotateImg);
+
 
     }
+
+
 
 }

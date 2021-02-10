@@ -3,11 +3,9 @@
  * @version 1.0
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Image
@@ -16,14 +14,44 @@ public class Image
     String imgType;
     private int width;
     private int height;
+    private int maxColorValue;
     private Pixel lstPixel[][];
 
 
     //Manque sa a finir : get le type
-    public Image(File fichier)
+    public Image(String FileName)
     {
         try {
-            Scanner fileReader = new Scanner(fichier);
+            BufferedInputStream in  = new BufferedInputStream(new DataInputStream(new FileInputStream(FileName)));
+            Scanner fileReader = new Scanner(in).useLocale(Locale.CANADA);
+            imgType = fileReader.next();
+            width =  fileReader.nextInt();
+            height = fileReader.nextInt();
+            maxColorValue = fileReader.nextInt();
+
+            if(imgType == "PGM"){
+                lstPixel = new BWPixel[width][height];
+                for(int j = 0 ; j < height ; j++){
+                    for(int i = 0 ; i < width;i++) {
+                        int pixelValue = fileReader.nextInt();
+                        setPixel(i,j,pixelValue);
+                    }
+                }
+            }
+            else if (imgType == "PPM"){
+                lstPixel = new ColorPixel[width][height];
+
+                for(int j = 0 ; j < height ; j++){
+                    for(int i = 0 ; i < width;i++) {
+                        int pixelValuec1 = fileReader.nextInt();
+                        int pixelValuec2 = fileReader.nextInt();
+                        int pixelValuec3 = fileReader.nextInt();
+                        setPixel(i,j,pixelValuec1,pixelValuec2,pixelValuec3);
+                    }
+                }
+            }
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -136,6 +164,29 @@ public class Image
     {
         int newW = height;
         int newH = width;
+        Pixel newLstPixel[][] = null;
+
+        if(imgType =="P2"){                     //PGM
+            newLstPixel = new BWPixel[width][height];
+
+            for(int j = 0; j < height ; j ++ ){
+                for(int i = 0 ; i < width ; i++){
+                    newLstPixel[j][newW-i-newH] = getPixel(i,j);
+
+                }
+            }
+        }
+        else if (imgType == "P3"){              //PPM
+            newLstPixel = new ColorPixel[width][height];
+
+            for(int j = 0; j < height ; j ++ ){
+                for(int i = 0 ; i < width ; i++){
+                    newLstPixel[newH-1-j][i] = getPixel(i,j);
+
+                }
+            }
+        }
+
 
 
     }
@@ -190,6 +241,12 @@ public class Image
 
     private Pixel getPixel(int x, int y ){
 
+        if(lstPixel[x][y] instanceof BWPixel){
+            return lstPixel[x][y];
+        }
+        else if (lstPixel[x][y] instanceof ColorPixel){
+            return lstPixel[x][y];
+        }
         return lstPixel[x][y];
     }
     private void setPixel(int x,int y , int value){
