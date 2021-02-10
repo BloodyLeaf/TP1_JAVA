@@ -19,7 +19,7 @@ public class ImageAnalyser
     /**
      *  Écrit une image dans un fichier
      * @param f fichier d'écriture
-     * @param i image à écrire
+     * @param img image à écrire
      */
     public static void write(File f, Image img)
     {
@@ -83,9 +83,9 @@ public class ImageAnalyser
      * @param img image à pivoter
      * @return image pivoter
      */
-    public static Image rotate90(Image img)
+    public static void rotate90(Image img)
     {
-        return img.rotate90();
+        img.rotate90();
     }
 
     /**

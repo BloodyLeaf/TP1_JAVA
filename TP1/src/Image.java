@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Image
 {
-    private File f;
+
     String imgType;
     private int width;
     private int height;
@@ -26,6 +26,18 @@ public class Image
             Scanner fileReader = new Scanner(fichier);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+    public Image(int w, int h, String imageType){
+        width = w;
+        height = h;
+        imgType = imageType;
+
+        if(imgType =="P2"){                     //PGM
+            lstPixel = new BWPixel[width][height];
+        }
+        else if (imgType == "P3"){              //PPM
+            lstPixel = new ColorPixel[width][height];
         }
     }
     /**
@@ -120,22 +132,78 @@ public class Image
     /**
      * tourne l'image a 90
      */
-    public static void rotate90()
+    public void rotate90()
     {
+        int newW = height;
+        int newH = width;
+
 
     }
 
     /**
      * reduit la grosseur de l'image
      */
-    public static Image reduce()
+    public Image reduce()
     {
-        Image img = null;
-        return img;
+        Image reducedImage = new Image(width,height,imgType);
+        if(imgType == "P2"){                    //PGM
+
+
+            for(int j = 0 ; j < height-1 ; j+=2) {
+                for(int i = 0 ; i < width-1 ; i+=2){
+                    int moy = ((BWPixel)lstPixel[i][j]).getCodeValue();
+                    moy += ((BWPixel)lstPixel[i+1][j]).getCodeValue();
+                    moy += ((BWPixel)lstPixel[i][j+1]).getCodeValue();
+                    moy += ((BWPixel)lstPixel[i+1][j+1]).getCodeValue();
+                    reducedImage.setPixel(i/2,j/2,moy/4);
+
+                }
+            }
+
+
+        } else if(imgType =="P3"){                          //PPM
+            for(int j = 0 ; j < height-1 ; j+=2) {
+                for(int i = 0 ; i < width-1 ; i+=2){
+                    int moy1 = ((ColorPixel)lstPixel[i][j]).getColor1();
+                    moy1 += ((ColorPixel)lstPixel[i+1][j]).getColor1();
+                    moy1 += ((ColorPixel)lstPixel[i][j+1]).getColor1();
+                    moy1 += ((ColorPixel)lstPixel[i+1][j+1]).getColor1();
+
+                    int moy2 = ((ColorPixel)lstPixel[i][j]).getColor2();
+                    moy2 += ((ColorPixel)lstPixel[i+1][j]).getColor2();
+                    moy2 += ((ColorPixel)lstPixel[i][j+1]).getColor2();
+                    moy2 += ((ColorPixel)lstPixel[i+1][j+1]).getColor2();
+
+                    int moy3 = ((ColorPixel)lstPixel[i][j]).getColor2();
+                    moy3 += ((ColorPixel)lstPixel[i+1][j]).getColor2();
+                    moy3 += ((ColorPixel)lstPixel[i][j+1]).getColor2();
+                    moy3 += ((ColorPixel)lstPixel[i+1][j+1]).getColor2();
+
+                    reducedImage.setPixel(i/2,j/2,moy1/4,moy2/4,moy3/4);
+
+                }
+            }
+        }
+
+        return reducedImage;
     }
 
     private Pixel getPixel(int x, int y ){
 
         return lstPixel[x][y];
     }
+    private void setPixel(int x,int y , int value){
+        if(lstPixel[x][y] instanceof BWPixel){
+            ((BWPixel) lstPixel[x][y]).setValue(value);
+        }
+
+    }
+
+    private void setPixel(int x,int y , int value1, int value2, int value3){
+        if(lstPixel[x][y] instanceof BWPixel){
+            ((ColorPixel) lstPixel[x][y]).setValue(value1,value2,value3);
+        }
+
+    }
+
 }

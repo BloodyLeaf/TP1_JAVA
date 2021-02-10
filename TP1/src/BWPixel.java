@@ -51,7 +51,7 @@ public class BWPixel extends Pixel
      *  envoie valuer color1
      * @return valeur de c1, est un int
      */
-    private int getCodeValue()
+    public int getCodeValue()
     {
         return this.color1;
     }
@@ -76,4 +76,10 @@ public class BWPixel extends Pixel
 
         return false;
     }
+
+
+    public void setValue(int value){
+        color1 = value;
+    }
+
 }

@@ -63,21 +63,21 @@ public class ColorPixel extends Pixel {
     /**
      * @return un int, la valeur de la couleur 1
      */
-    private int getColor1() {
+    public int getColor1() {
         return this.color1;
     }
 
     /**
      * @return un int, la valeur de la couleur 2
      */
-    private int getColor2() {
+    public int getColor2() {
         return this.color2;
     }
 
     /**
      * @return un int, la valeur de la couleur 3
      */
-    private int getColor3() {
+    public int getColor3() {
         return this.color3;
     }
 
@@ -108,6 +108,10 @@ public class ColorPixel extends Pixel {
         }
         return false;
     }
-
+    public void setValue(int c1,int c2,int c3){
+        color1 = c1;
+        color2 = c2;
+        color3 = c3;
+    }
 
 }
