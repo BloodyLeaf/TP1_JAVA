@@ -119,7 +119,7 @@ public class Image
     {
         for(int i = 0 ; i < width ; i++){
             for(int j = 0 ; j < height ; j++){
-                if(getPixel(i,j) instanceof BWPixel ) ((BWPixel)getPixel(i,j)).writePixel(f);
+                if(getPixel(i,j) instanceof BWPixel) ((BWPixel)getPixel(i,j)).writePixel(f);
                 if(getPixel(i,j) instanceof ColorPixel ) ((ColorPixel)getPixel(i,j)).writePixel(f);
             }
         }
@@ -240,14 +240,8 @@ public class Image
     }
 
     private Pixel getPixel(int x, int y ){
+            return lstPixel[x][y];
 
-        if(lstPixel[x][y] instanceof BWPixel){
-            return lstPixel[x][y];
-        }
-        else if (lstPixel[x][y] instanceof ColorPixel){
-            return lstPixel[x][y];
-        }
-        return lstPixel[x][y];
     }
     private void setPixel(int x,int y , int value){
         if(lstPixel[x][y] instanceof BWPixel){
