@@ -50,9 +50,9 @@ public class ColorPixel extends Pixel {
 
         try {
             FileWriter myWriter = new FileWriter(f);
-            myWriter.write(color1);
-            myWriter.write(color2);
-            myWriter.write(color3);
+            myWriter.write(color1 + " ");
+            myWriter.write(color2 + " ");
+            myWriter.write(color3 + " ");
             myWriter.close();
 
         } catch (IOException e) {

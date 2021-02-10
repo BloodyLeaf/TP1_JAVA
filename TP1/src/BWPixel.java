@@ -40,7 +40,7 @@ public class BWPixel extends Pixel
         try
         {
             writer = new FileWriter(f);
-            writer.write(this.getCodeValue());
+            writer.write(this.getCodeValue() + " ");
         }
         catch (IOException e)
         {
