@@ -39,7 +39,7 @@ public class ImageAnalyser
      * @param img image a vérifier
      * @return valeur de la couleur la plus présente, est un int
      */
-    public static int preponderanceColor(Image img)
+    public static Pixel preponderanceColor(Image img)
     {
         return img.prepoderanceColor();
     }

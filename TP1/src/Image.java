@@ -5,9 +5,7 @@
 
 import java.io.*;
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class Image
 {
@@ -19,7 +17,6 @@ public class Image
     private Pixel lstPixel[][];
 
 
-    //Manque sa a finir : get le type
     public Image(String FileName)
     {
         this.readImage(FileName);
@@ -59,40 +56,89 @@ public class Image
      * Verifie la couleur la plus présente dans l'image
      * @return couleur plus présente dans l'image
      */
-    public int prepoderanceColor()
+    public Pixel prepoderanceColor()
     {
-        int tempList[] = new int[0];
-        if(getPixel(1,1) instanceof BWPixel ) tempList = new int[width + height];
-        if(getPixel(1,1) instanceof ColorPixel ) tempList = new int[(width + height) * 3];
+        List<Pixel> tempList = new ArrayList<Pixel>();
+        Pixel res = new Pixel();
+        if(imgType == "PPM")
+        {
             for(int i = 0 ; i < width ; i++){
-            for(int j = 0 ; j < height ; j++){
-                if(getPixel(i,j) instanceof BWPixel ) tempList[i+j] = ((BWPixel)getPixel(i,j)).getCodeValue();
-                if(getPixel(i,j) instanceof ColorPixel )
+                for(int j = 0 ; j < height ; j++){
+                    tempList.add((BWPixel)getPixel(i,j));
+                }
+            }
+            int taille = tempList.size();
+            BWPixel tmp;
+            BWPixel testPixel;
+
+            for(int i=0; i < taille; i++)
+            {
+                for(int j=1; j < (taille-i); j++)
                 {
-                    tempList[i+j] = ((ColorPixel)getPixel(i,j)).getColor1();
-                    tempList[i+j+width+height] = ((ColorPixel)getPixel(i,j)).getColor2();
-                    tempList[i+j+((width+height)*2)] = ((ColorPixel)getPixel(i,j)).getColor3();
+
+                    {
+                        tmp = (BWPixel)tempList.get(j-1);
+                        tempList.set(j-1,tempList.get(j));
+                        tempList.set(j, tmp);
+                    }
+                }
+            }
+            int max_count = 1;
+            int curr_count = 1;
+            res = (BWPixel)tempList.get(0);
+
+            for(int i = 0 ; i < tempList.size() ; i++){
+                testPixel = (BWPixel)tempList.get(i-1);
+                if(testPixel.pixelsTheSame(tempList.get(i)))
+                    curr_count++;
+                else {
+                    if (curr_count > max_count) {
+                        max_count = curr_count;
+                        res = (BWPixel)tempList.get(i - 1);
+                    }
+                    curr_count = 1;
                 }
             }
         }
-        Arrays.sort(tempList);
-
-        int max_count = 1;
-        int curr_count = 1;
-        int res =  tempList[0];
-
-        for(int i = 0 ; i < tempList.length ; i++){
-
-            if (tempList[i] == tempList[i - 1])
-                curr_count++;
-            else {
-                if (curr_count > max_count) {
-                    max_count = curr_count;
-                    res = tempList[i - 1];
+        else if(imgType == "PGM")
+        {
+            for(int i = 0 ; i < width ; i++){
+                for(int j = 0 ; j < height ; j++){
+                    tempList.add((ColorPixel)getPixel(i,j));
                 }
-                curr_count = 1;
             }
+            int taille = tempList.size();
+            ColorPixel tmp;
+            ColorPixel testPixel;
 
+            for(int i=0; i < taille; i++)
+            {
+                for(int j=1; j < (taille-i); j++)
+                {
+
+                    {
+                        tmp = (ColorPixel)tempList.get(j-1);
+                        tempList.set(j-1,tempList.get(j));
+                        tempList.set(j, tmp);
+                    }
+                }
+            }
+            int max_count = 1;
+            int curr_count = 1;
+            res = (ColorPixel)tempList.get(0);
+
+            for(int i = 0 ; i < tempList.size() ; i++){
+                testPixel = (ColorPixel)tempList.get(i-1);
+                if(testPixel.pixelsTheSame(tempList.get(i)))
+                    curr_count++;
+                else {
+                    if (curr_count > max_count) {
+                        max_count = curr_count;
+                        res = (ColorPixel)tempList.get(i - 1);
+                    }
+                    curr_count = 1;
+                }
+            }
         }
         return res;
     }
