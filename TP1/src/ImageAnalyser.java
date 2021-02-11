@@ -99,7 +99,7 @@ public class ImageAnalyser
         img1.rotate90();
 
 
-        File rotateImg = new File("frontenac_Rotate.pgm");
+        File rotateImg = new File("imageNB2.pgm");
 
         img1.write(rotateImg);
 

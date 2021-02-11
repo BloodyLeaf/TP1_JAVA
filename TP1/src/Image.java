@@ -16,7 +16,6 @@ public class Image
     private int maxColorValue;
     private Pixel lstPixel[][];
 
-
     public Image(String FileName)
     {
         this.readImage(FileName);
@@ -27,10 +26,11 @@ public class Image
         height = h;
         imgType = imageType;
 
-        if(imgType =="P2"){                     //PGM
+        if(imgType.equals("P2")){                     //PGM
+
             lstPixel = new BWPixel[width][height];
         }
-        else if (imgType == "P3"){              //PPM
+        else if (imgType.equals("P3")){              //PPM
             lstPixel = new ColorPixel[width][height];
         }
     }
@@ -60,7 +60,7 @@ public class Image
     {
         List<Pixel> tempList = new ArrayList<Pixel>();
         Pixel res = new Pixel();
-        if(imgType == "PPM")
+        if(imgType.equals("P2"))
         {
             for(int i = 0 ; i < width ; i++){
                 for(int j = 0 ; j < height ; j++){
@@ -100,7 +100,7 @@ public class Image
                 }
             }
         }
-        else if(imgType == "PGM")
+        else if(imgType.equals("P3"))
         {
             for(int i = 0 ; i < width ; i++){
                 for(int j = 0 ; j < height ; j++){
@@ -164,10 +164,16 @@ public class Image
      */
     public void write(File f)
     {
-        for(int i = 0 ; i < width ; i++){
-            for(int j = 0 ; j < height ; j++){
-                if(getPixel(i,j) instanceof BWPixel) ((BWPixel)getPixel(i,j)).writePixel(f);
-                if(getPixel(i,j) instanceof ColorPixel ) ((ColorPixel)getPixel(i,j)).writePixel(f);
+        for(int j = 0 ; j < height ; j++){
+            for(int i = 0 ; i < width ; i++){
+
+                if(getPixel(i,j) instanceof BWPixel){
+                    System.out.println(((BWPixel)getPixel(i,j)).getCodeValue());
+                    ((BWPixel)getPixel(i,j)).writePixel(f);
+                }
+                if(getPixel(i,j) instanceof ColorPixel ){
+                    ((ColorPixel)getPixel(i,j)).writePixel(f);
+                }
             }
         }
     }
@@ -180,13 +186,16 @@ public class Image
     {
         try {
             BufferedInputStream in  = new BufferedInputStream(new DataInputStream(new FileInputStream(f)));
-            Scanner fileReader = new Scanner(in).useLocale(Locale.CANADA);
+            Scanner fileReader = new Scanner(in);
             imgType = fileReader.next();
             width =  fileReader.nextInt();
             height = fileReader.nextInt();
             maxColorValue = fileReader.nextInt();
 
-            if(imgType == "PGM"){
+
+
+            if(imgType.equals("P2")){
+                
                 lstPixel = new BWPixel[width][height];
                 for(int j = 0 ; j < height ; j++){
                     for(int i = 0 ; i < width;i++) {
@@ -195,7 +204,7 @@ public class Image
                     }
                 }
             }
-            else if (imgType == "PPM"){
+            else if (imgType.equals("P3")){
                 lstPixel = new ColorPixel[width][height];
 
                 for(int j = 0 ; j < height ; j++){
@@ -207,6 +216,7 @@ public class Image
                     }
                 }
             }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -220,16 +230,16 @@ public class Image
     {
         Image img2 = new Image(img.width,img.height, img.imgType);
 
-        if(img2.imgType == "PGM"){
+        if(img2.imgType.equals("P2")) {
             img2.lstPixel = new BWPixel[img2.width][img2.height];
-            for(int j = 0 ; j < img2.height ; j++){
-                for(int i = 0 ; i < img2.width;i++) {
-                    BWPixel tempPixel = (BWPixel)img.getPixel(i,j);
+            for (int j = 0; j < img2.height; j++) {
+                for (int i = 0; i < img2.width; i++) {
+                    BWPixel tempPixel = (BWPixel) img.getPixel(i, j);
                     img2.setPixel(i, j, tempPixel.getCodeValue());
                 }
             }
         }
-        else if (img2.imgType == "PPM"){
+        else if (img2.imgType.equals("P3")){
             img2.lstPixel = new ColorPixel[img2.width][img2.height];
 
             for(int j = 0 ; j < img2.height ; j++){
@@ -254,7 +264,7 @@ public class Image
         Image newImg;
         newImg = new Image(nWidth,nHeight, this.imgType);
 
-        if(newImg.imgType == "PGM"){
+        if(newImg.imgType.equals("P2")){
             newImg.lstPixel = new BWPixel[newImg.width][newImg.height];
             for(int j = 0 ; j < newImg.height ; j++){
                 for(int i = 0 ; i < newImg.width;i++) {
@@ -263,7 +273,7 @@ public class Image
                 }
             }
         }
-        else if (newImg.imgType == "PPM"){
+        else if (newImg.imgType.equals("P3")){
             newImg.lstPixel = new ColorPixel[newImg.width][newImg.height];
 
             for(int j = 0 ; j < newImg.height ; j++){
@@ -283,19 +293,21 @@ public class Image
     {
         int newW = height;
         int newH = width;
-        Pixel newLstPixel[][] = null;
+        Pixel[][] newLstPixel = new BWPixel[newW][newH];
 
-        if(imgType =="P2"){                     //PGM
-            newLstPixel = new BWPixel[width][height];
+        if(imgType.equals("P2")){                     //PGM
 
-            for(int j = 0; j < height ; j ++ ){
-                for(int i = 0 ; i < width ; i++){
-                    newLstPixel[j][newW-i-newH] = getPixel(i,j);
+
+            for(int i = 0; i < width ; i++ ){
+                for(int j = 0 ; j < height ; j++){
+                    System.out.println("i : " + i + " j : " + j);
+
+                    newLstPixel[j][width-1-i] = getPixel(i,j);
 
                 }
             }
         }
-        else if (imgType == "P3"){              //PPM
+        else if (imgType.equals("P3")){              //PPM
             newLstPixel = new ColorPixel[width][height];
 
             for(int j = 0; j < height ; j ++ ){
@@ -306,7 +318,7 @@ public class Image
             }
         }
 
-
+        lstPixel = newLstPixel;
 
     }
 
@@ -316,7 +328,7 @@ public class Image
     public Image reduce()
     {
         Image reducedImage = new Image(width,height,imgType);
-        if(imgType == "P2"){                    //PGM
+        if(imgType.equals("P2")){                    //PGM
 
 
             for(int j = 0 ; j < height-1 ; j+=2) {
@@ -331,7 +343,7 @@ public class Image
             }
 
 
-        } else if(imgType =="P3"){                          //PPM
+        } else if(imgType.equals("P3")){                          //PPM
             for(int j = 0 ; j < height-1 ; j+=2) {
                 for(int i = 0 ; i < width-1 ; i+=2){
                     int moy1 = ((ColorPixel)lstPixel[i][j]).getColor1();
@@ -358,7 +370,7 @@ public class Image
         return reducedImage;
     }
 
-    private Pixel getPixel(int x, int y ){
+    private Pixel getPixel(int x, int y){
             return lstPixel[x][y];
 
     }
