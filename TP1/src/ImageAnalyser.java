@@ -96,10 +96,13 @@ public class ImageAnalyser
     {
         String nomFichierImage = "Sherbrooke_Frontenac_nuit.pgm";
         Image img1 = new Image(nomFichierImage);
+        Image img2 = new Image(nomFichierImage);
         img1.rotate90();
 
+        //img2.reduce();
 
-        File rotateImg = new File("imageNB2.pgm");
+
+        File rotateImg = new File("Sherbrooke_Frontenac_nuit_rotate.pgm");
 
         img1.write(rotateImg);
 

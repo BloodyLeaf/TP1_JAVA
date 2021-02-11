@@ -333,6 +333,7 @@ public class Image
 
             for(int j = 0 ; j < height-1 ; j+=2) {
                 for(int i = 0 ; i < width-1 ; i+=2){
+
                     int moy = ((BWPixel)lstPixel[i][j]).getCodeValue();
                     moy += ((BWPixel)lstPixel[i+1][j]).getCodeValue();
                     moy += ((BWPixel)lstPixel[i][j+1]).getCodeValue();
