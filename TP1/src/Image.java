@@ -89,9 +89,8 @@ public class Image
             int curr_count = 1;
             res = (BWPixel)tempList.get(0);
 
-            for(int i = 0 ; i < tempList.size() ; i++){
-                testPixel = (BWPixel)tempList.get(i-1);
-                if(testPixel.pixelsTheSame(tempList.get(i)))
+            for(int i = 1 ; i < tempList.size() ; i++){
+                if(((BWPixel)tempList.get(i-1)).pixelsTheSame(tempList.get(i)))
                     curr_count++;
                 else {
                     if (curr_count > max_count) {
@@ -129,9 +128,8 @@ public class Image
             int curr_count = 1;
             res = (ColorPixel)tempList.get(0);
 
-            for(int i = 0 ; i < tempList.size() ; i++){
-                testPixel = (ColorPixel)tempList.get(i-1);
-                if(testPixel.pixelsTheSame(tempList.get(i)))
+            for(int i = 1 ; i < tempList.size() ; i++){
+                if(((ColorPixel)tempList.get(i-1)).pixelsTheSame(tempList.get(i)))
                     curr_count++;
                 else {
                     if (curr_count > max_count) {
@@ -282,8 +280,7 @@ public class Image
             newImg.lstPixel = new BWPixel[newImg.width][newImg.height];
             for(int j = 0 ; j < newImg.height ; j++){
                 for(int i = 0 ; i < newImg.width;i++) {
-                    BWPixel tempPixel = (BWPixel)this.getPixel(i + x, j + y);
-                    newImg.setPixel(i, j, tempPixel.getCodeValue());
+                    newImg.setPixel(i, j, ((BWPixel)this.getPixel(i + x, j + y)).getCodeValue());
                 }
             }
         }
@@ -292,8 +289,7 @@ public class Image
 
             for(int j = 0 ; j < newImg.height ; j++){
                 for(int i = 0 ; i < newImg.width;i++) {
-                    ColorPixel tempPixel = (ColorPixel)this.getPixel(i + x, j + y);
-                    newImg.setPixel(i,j,tempPixel.getColor1(),tempPixel.getColor2(),tempPixel.getColor3());
+                    newImg.setPixel(i,j,((ColorPixel) this.getPixel(i + x, j + y)).getColor1(),((ColorPixel) this.getPixel(i + x, j + y)).getColor2(),((ColorPixel) this.getPixel(i + x, j + y)).getColor3());
                 }
             }
         }
@@ -390,7 +386,7 @@ public class Image
     }
     private void setPixel(int x,int y , int value){
 
-        if(imgType.equals("P2")){
+       if(imgType.equals("P2")){
             lstPixel[x][y] = new BWPixel(value);
 
         }

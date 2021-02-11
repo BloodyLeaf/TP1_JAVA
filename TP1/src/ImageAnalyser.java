@@ -97,13 +97,23 @@ public class ImageAnalyser
         String nomFichierImage = "Sherbrooke_Frontenac_nuit.pgm";
         Image img1 = new Image(nomFichierImage);
         Image img2 = new Image(nomFichierImage);
-        rotate90(img1);
-        reduce(img2);
+        img1.rotate90();
 
+        img2.reduce();
+        Image img3 = new Image(nomFichierImage);
+        img3 = img2.extract(1,1,100,100);
 
         File rotateImg = new File("Sherbrooke_Frontenac_nuit_rotate.pgm");
+        File extractImg = new File("Sherbrooke_Frontenac_nuit_extract.pgm");
+        File copyImg = new File("Sherbrooke_Frontenac_nuit_copy.pgm");
+        BWPixel max = (BWPixel)img3.prepoderanceColor();
+        int couleur = max.getCodeValue();
+        img3.write(extractImg);
+        img1.write(rotateImg);
+        img2.copyImage(img3);
+        img3.write(copyImg);
 
-        write(rotateImg,img1);
+        System.out.println(couleur);
 
 
     }
