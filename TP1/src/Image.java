@@ -319,7 +319,8 @@ public class Image
         }
 
         lstPixel = newLstPixel;
-
+        width  = newW;
+        height = newH;
     }
 
     /**
