@@ -192,15 +192,14 @@ public class Image
             height = fileReader.nextInt();
             maxColorValue = fileReader.nextInt();
 
-
-
             if(imgType.equals("P2")){
                 
                 lstPixel = new BWPixel[width][height];
                 for(int j = 0 ; j < height ; j++){
                     for(int i = 0 ; i < width;i++) {
                         int pixelValue = fileReader.nextInt();
-                        setPixel(i,j,pixelValue);
+                        lstPixel[i][j] = new BWPixel(pixelValue);
+                        //((BWPixel)lstPixel[i][j]).setValue(pixelValue);
                     }
                 }
             }
@@ -380,8 +379,8 @@ public class Image
     private void setPixel(int x,int y , int value){
 
         if(imgType.equals("P2")){
+            lstPixel[x][y] = new BWPixel(value);
 
-            ((BWPixel)lstPixel[x][y]).setValue(value);
         }
 
     }
