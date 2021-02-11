@@ -3,9 +3,11 @@
  * @version 1.0
  */
 
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.List;
 
 public class Image
 {
@@ -164,6 +166,17 @@ public class Image
      */
     public void write(File f)
     {
+        FileWriter writer = null;
+        try{
+            writer = new FileWriter(f,true);
+            writer.write(imgType + "\n");
+            writer.write(width+ " " + height +"\n");
+            writer.write(maxColorValue +"\n");
+            writer.close();
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         for(int j = 0 ; j < height ; j++){
             for(int i = 0 ; i < width ; i++){
 
@@ -175,6 +188,8 @@ public class Image
                     ((ColorPixel)getPixel(i,j)).writePixel(f);
                 }
             }
+
+
         }
     }
 
@@ -332,9 +347,6 @@ public class Image
 
             for(int j = 0 ; j < height-1 ; j+=2) {
                 for(int i = 0 ; i < width-1 ; i+=2){
-
-                    System.out.println("i : " + i + " j : " + j);
-                    System.out.println( (BWPixel)getPixel(i,j));
                     int moy = ((BWPixel) getPixel(i, j)).getCodeValue();
                     moy += ((BWPixel)getPixel(i,j)).getCodeValue();
                     moy += ((BWPixel)getPixel(i,j)).getCodeValue();
@@ -387,7 +399,7 @@ public class Image
 
     private void setPixel(int x,int y , int value1, int value2, int value3){
         if(imgType.equals("P3")){
-            ((ColorPixel) lstPixel[x][y]).setValue(value1,value2,value3);
+            lstPixel[x][y] = new ColorPixel(value1,value2,value3);
         }
 
     }

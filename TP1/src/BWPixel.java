@@ -39,9 +39,10 @@ public class BWPixel extends Pixel
         FileWriter writer = null;
         try
         {
-            writer = new FileWriter(f);
-            writer.write(this.getCodeValue() + " ");
 
+            writer = new FileWriter(f,true);
+            writer.write(this.getCodeValue() + " ");
+            writer.close();
         }
         catch (IOException e)
         {
