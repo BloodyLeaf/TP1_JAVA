@@ -11,7 +11,7 @@ public class ImageAnalyser
      * lit une image d'un fichier
      * @param f fichier contenant l'image
      */
-    public static void readImage(File f, Image img)
+    public static void readImage(String f, Image img)
     {
         img.readImage(f);
     }

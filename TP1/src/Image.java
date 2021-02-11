@@ -5,6 +5,7 @@
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -21,41 +22,9 @@ public class Image
     //Manque sa a finir : get le type
     public Image(String FileName)
     {
-        try {
-            BufferedInputStream in  = new BufferedInputStream(new DataInputStream(new FileInputStream(FileName)));
-            Scanner fileReader = new Scanner(in).useLocale(Locale.CANADA);
-            imgType = fileReader.next();
-            width =  fileReader.nextInt();
-            height = fileReader.nextInt();
-            maxColorValue = fileReader.nextInt();
-
-            if(imgType == "PGM"){
-                lstPixel = new BWPixel[width][height];
-                for(int j = 0 ; j < height ; j++){
-                    for(int i = 0 ; i < width;i++) {
-                        int pixelValue = fileReader.nextInt();
-                        setPixel(i,j,pixelValue);
-                    }
-                }
-            }
-            else if (imgType == "PPM"){
-                lstPixel = new ColorPixel[width][height];
-
-                for(int j = 0 ; j < height ; j++){
-                    for(int i = 0 ; i < width;i++) {
-                        int pixelValuec1 = fileReader.nextInt();
-                        int pixelValuec2 = fileReader.nextInt();
-                        int pixelValuec3 = fileReader.nextInt();
-                        setPixel(i,j,pixelValuec1,pixelValuec2,pixelValuec3);
-                    }
-                }
-            }
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        this.readImage(FileName);
     }
+
     public Image(int w, int h, String imageType){
         width = w;
         height = h;
@@ -72,7 +41,6 @@ public class Image
      * permet de set la largeur de l'image
      * @param width largeur de limage, doit être un int
      */
-
     public void setWidth(int width)
     {
         this.width = width;
@@ -89,11 +57,44 @@ public class Image
 
     /**
      * Verifie la couleur la plus présente dans l'image
-     * @return
+     * @return couleur plus présente dans l'image
      */
-    public static int prepoderanceColor()
+    public int prepoderanceColor()
     {
-        return 0;
+        int tempList[] = new int[0];
+        if(getPixel(1,1) instanceof BWPixel ) tempList = new int[width + height];
+        if(getPixel(1,1) instanceof ColorPixel ) tempList = new int[(width + height) * 3];
+            for(int i = 0 ; i < width ; i++){
+            for(int j = 0 ; j < height ; j++){
+                if(getPixel(i,j) instanceof BWPixel ) tempList[i+j] = ((BWPixel)getPixel(i,j)).getCodeValue();
+                if(getPixel(i,j) instanceof ColorPixel )
+                {
+                    tempList[i+j] = ((ColorPixel)getPixel(i,j)).getColor1();
+                    tempList[i+j+width+height] = ((ColorPixel)getPixel(i,j)).getColor2();
+                    tempList[i+j+((width+height)*2)] = ((ColorPixel)getPixel(i,j)).getColor3();
+                }
+            }
+        }
+        Arrays.sort(tempList);
+
+        int max_count = 1;
+        int curr_count = 1;
+        int res =  tempList[0];
+
+        for(int i = 0 ; i < tempList.length ; i++){
+
+            if (tempList[i] == tempList[i - 1])
+                curr_count++;
+            else {
+                if (curr_count > max_count) {
+                    max_count = curr_count;
+                    res = tempList[i - 1];
+                }
+                curr_count = 1;
+            }
+
+        }
+        return res;
     }
 
 
@@ -129,9 +130,40 @@ public class Image
      * Lit l'image d'un fichier
      * @param f Fichier contenant l'image
      */
-    public void readImage(File f)
+    public void readImage(String f)
     {
+        try {
+            BufferedInputStream in  = new BufferedInputStream(new DataInputStream(new FileInputStream(f)));
+            Scanner fileReader = new Scanner(in).useLocale(Locale.CANADA);
+            imgType = fileReader.next();
+            width =  fileReader.nextInt();
+            height = fileReader.nextInt();
+            maxColorValue = fileReader.nextInt();
 
+            if(imgType == "PGM"){
+                lstPixel = new BWPixel[width][height];
+                for(int j = 0 ; j < height ; j++){
+                    for(int i = 0 ; i < width;i++) {
+                        int pixelValue = fileReader.nextInt();
+                        setPixel(i,j,pixelValue);
+                    }
+                }
+            }
+            else if (imgType == "PPM"){
+                lstPixel = new ColorPixel[width][height];
+
+                for(int j = 0 ; j < height ; j++){
+                    for(int i = 0 ; i < width;i++) {
+                        int pixelValuec1 = fileReader.nextInt();
+                        int pixelValuec2 = fileReader.nextInt();
+                        int pixelValuec3 = fileReader.nextInt();
+                        setPixel(i,j,pixelValuec1,pixelValuec2,pixelValuec3);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -140,7 +172,27 @@ public class Image
      */
     public static void copyImage(Image img)
     {
+        Image img2 = new Image(img.width,img.height, img.imgType);
 
+        if(img2.imgType == "PGM"){
+            img2.lstPixel = new BWPixel[img2.width][img2.height];
+            for(int j = 0 ; j < img2.height ; j++){
+                for(int i = 0 ; i < img2.width;i++) {
+                    BWPixel tempPixel = (BWPixel)img.getPixel(i,j);
+                    img2.setPixel(i, j, tempPixel.getCodeValue());
+                }
+            }
+        }
+        else if (img2.imgType == "PPM"){
+            img2.lstPixel = new ColorPixel[img2.width][img2.height];
+
+            for(int j = 0 ; j < img2.height ; j++){
+                for(int i = 0 ; i < img2.width;i++) {
+                    ColorPixel tempPixel = (ColorPixel)img.getPixel(i,j);
+                    img2.setPixel(i,j,tempPixel.getColor1(),tempPixel.getColor2(),tempPixel.getColor3());
+                }
+            }
+        }
     }
 
     /**
@@ -151,10 +203,31 @@ public class Image
      * @param nWidth largeur de l'image, doit être un int
      * @return nouvelle image
      */
-    public static Image extract(int x, int y, int nHeight, int nWidth)
+    public  Image extract(int x, int y, int nHeight, int nWidth)
     {
-        Image img = null;
-        return img;
+        Image newImg;
+        newImg = new Image(nWidth,nHeight, this.imgType);
+
+        if(newImg.imgType == "PGM"){
+            newImg.lstPixel = new BWPixel[newImg.width][newImg.height];
+            for(int j = 0 ; j < newImg.height ; j++){
+                for(int i = 0 ; i < newImg.width;i++) {
+                    BWPixel tempPixel = (BWPixel)this.getPixel(i + x, j + y);
+                    newImg.setPixel(i, j, tempPixel.getCodeValue());
+                }
+            }
+        }
+        else if (newImg.imgType == "PPM"){
+            newImg.lstPixel = new ColorPixel[newImg.width][newImg.height];
+
+            for(int j = 0 ; j < newImg.height ; j++){
+                for(int i = 0 ; i < newImg.width;i++) {
+                    ColorPixel tempPixel = (ColorPixel)this.getPixel(i + x, j + y);
+                    newImg.setPixel(i,j,tempPixel.getColor1(),tempPixel.getColor2(),tempPixel.getColor3());
+                }
+            }
+        }
+        return newImg;
     }
 
     /**
