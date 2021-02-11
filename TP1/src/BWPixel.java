@@ -80,6 +80,7 @@ public class BWPixel extends Pixel
 
 
     public void setValue(int value){
+        System.out.println("Value is setValue " + value);
         color1 = value;
     }
 

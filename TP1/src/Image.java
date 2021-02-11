@@ -14,7 +14,7 @@ public class Image
     private int width;
     private int height;
     private int maxColorValue;
-    private Pixel lstPixel[][];
+    private Pixel[][] lstPixel;
 
     public Image(String FileName)
     {
@@ -168,7 +168,7 @@ public class Image
             for(int i = 0 ; i < width ; i++){
 
                 if(getPixel(i,j) instanceof BWPixel){
-                    System.out.println(((BWPixel)getPixel(i,j)).getCodeValue());
+
                     ((BWPixel)getPixel(i,j)).writePixel(f);
                 }
                 if(getPixel(i,j) instanceof ColorPixel ){
@@ -300,8 +300,6 @@ public class Image
 
             for(int i = 0; i < width ; i++ ){
                 for(int j = 0 ; j < height ; j++){
-                    System.out.println("i : " + i + " j : " + j);
-
                     newLstPixel[j][width-1-i] = getPixel(i,j);
 
                 }
@@ -312,6 +310,7 @@ public class Image
 
             for(int j = 0; j < height ; j ++ ){
                 for(int i = 0 ; i < width ; i++){
+
                     newLstPixel[newH-1-j][i] = getPixel(i,j);
 
                 }
@@ -328,17 +327,19 @@ public class Image
      */
     public Image reduce()
     {
-        Image reducedImage = new Image(width,height,imgType);
+        Image reducedImage = new Image(width/2,height/2,imgType);
         if(imgType.equals("P2")){                    //PGM
 
 
             for(int j = 0 ; j < height-1 ; j+=2) {
                 for(int i = 0 ; i < width-1 ; i+=2){
 
-                    int moy = ((BWPixel)lstPixel[i][j]).getCodeValue();
-                    moy += ((BWPixel)lstPixel[i+1][j]).getCodeValue();
-                    moy += ((BWPixel)lstPixel[i][j+1]).getCodeValue();
-                    moy += ((BWPixel)lstPixel[i+1][j+1]).getCodeValue();
+                    System.out.println("i : " + i + " j : " + j);
+                    System.out.println( (BWPixel)getPixel(i,j));
+                    int moy = ((BWPixel) getPixel(i, j)).getCodeValue();
+                    moy += ((BWPixel)getPixel(i,j)).getCodeValue();
+                    moy += ((BWPixel)getPixel(i,j)).getCodeValue();
+                    moy += ((BWPixel)getPixel(i,j)).getCodeValue();
                     reducedImage.setPixel(i/2,j/2,moy/4);
 
                 }
@@ -377,14 +378,16 @@ public class Image
 
     }
     private void setPixel(int x,int y , int value){
-        if(lstPixel[x][y] instanceof BWPixel){
-            ((BWPixel) lstPixel[x][y]).setValue(value);
+
+        if(imgType.equals("P2")){
+
+            ((BWPixel)lstPixel[x][y]).setValue(value);
         }
 
     }
 
     private void setPixel(int x,int y , int value1, int value2, int value3){
-        if(lstPixel[x][y] instanceof BWPixel){
+        if(imgType.equals("P3")){
             ((ColorPixel) lstPixel[x][y]).setValue(value1,value2,value3);
         }
 

@@ -99,7 +99,7 @@ public class ImageAnalyser
         Image img2 = new Image(nomFichierImage);
         img1.rotate90();
 
-        //img2.reduce();
+        img2.reduce();
 
 
         File rotateImg = new File("Sherbrooke_Frontenac_nuit_rotate.pgm");
